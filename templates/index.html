@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HR Assistant AI</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <i class="fa-solid fa-robot"></i> <span>HR Agent</span>
+        </div>
+        
+        <div class="history-container">
+            <div class="history-label">Recent Chats</div>
+            <ul id="history-list">
+                </ul>
+        </div>
+
+        <div class="sidebar-footer">
+            <button id="clear-history-btn" class="btn-sidebar">
+                <i class="fa-regular fa-trash-can"></i> Clear History
+            </button>
+            <button id="toggle-dark-mode" class="btn-sidebar">
+                <i class="fa-regular fa-moon"></i> <span>Dark Mode</span>
+            </button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div id="chat-container" class="chat-container">
+            <div class="message bot-message">
+                <div class="avatar"><i class="fa-solid fa-robot"></i></div>
+                <div class="content">
+                    Hello! I am your AI HR Assistant. Ask me about policies, leaves, or benefits.
+                </div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <form id="search-form" class="input-wrapper">
+                <input type="text" id="query" placeholder="Ask a question..." autocomplete="off" required>
+                <button type="submit" class="send-btn">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
+            <div class="footer-text">AI can make mistakes. Check important info.</div>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>

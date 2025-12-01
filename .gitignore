@@ -1,0 +1,7 @@
+.env
+__pycache__/
+vectorstore/
+venv/
+.DS_Store
+run.md
+data/

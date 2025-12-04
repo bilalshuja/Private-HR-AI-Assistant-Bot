@@ -1,0 +1,24 @@
+services:
+  # Service 1: Aapki Python App
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - REDIS_HOST=redis_db  # Ye niche wale service ka naam hai
+      - REDIS_PORT=6379
+      # Pinecone Keys (Yahan apni keys paste karein ya .env file use karein)
+      - PINECONE_API_KEY=${PINECONE_API_KEY}
+      - PINECONE_INDEX_NAME=${PINECONE_INDEX_NAME}
+      # Ollama Connection (Docker se Laptop tak)
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+    depends_on:
+      - redis_db
+    env_file:
+      - .env  # Ye aapki local .env file utha lega
+
+  # Service 2: Redis Database
+  redis_db:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"

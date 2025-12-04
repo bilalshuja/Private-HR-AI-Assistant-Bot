@@ -24,7 +24,7 @@ def get_retriever():
         return None
 
     try:
-        embeddings = OllamaEmbeddings(model=Config.EMBEDDING_MODEL)
+        embeddings = OllamaEmbeddings(model=Config.EMBEDDING_MODEL,base_url=Config.OLLAMA_BASE_URL)
         
         bm25_encoder = BM25Encoder().default()
         bm25_encoder.load(Config.BM25_PARAMS_PATH)
@@ -68,21 +68,37 @@ YOUR ANSWER:"""
 )
 
 def generate_ai_response(query):
+    greetings = ["hi", "hello", "hey", "how are you", "good morning", "good evening", "salam", "ok", "thanks", "thank you"]
+    
+    if query.strip().lower() in greetings:
+        return "Hello! I am your HR Assistant. Please ask me questions about company policies, leaves, or benefits."
+
     retriever = get_retriever()
     if not retriever:
         return "System Error: Knowledge base not loaded."
 
-    relevant_docs = retriever.invoke(query)
+    # --- 2. SAFE RETRIEVAL (Crash Proofing) ---
+    try:
+        relevant_docs = retriever.invoke(query)
+    except Exception as e:
+        logger.warning(f"Retrieval Warning: {e}")
+        return "I couldn't find specific keywords in your query. Please ask a more specific question (e.g., 'What is the sick leave policy?')."
+
     if not relevant_docs:
         return "I can only answer questions related to HR policies."
 
     context = "\n\n".join([doc.page_content for doc in relevant_docs])
     full_prompt = prompt_template.format(context=context, query=query)
     
-    # Generate
-    llm = OllamaLLM(model=Config.LLM_MODEL)
-    raw_response = llm.invoke(full_prompt)
-    
-    # Clean <think> tags
-    clean_response = re.sub(r'<think>.*?</think>', '', raw_response, flags=re.DOTALL).strip()
-    return clean_response
+    # --- 3. GENERATION ---
+    try:
+        llm = OllamaLLM(model=Config.LLM_MODEL, base_url=Config.OLLAMA_BASE_URL)
+        raw_response = llm.invoke(full_prompt)
+        
+        # Clean <think> tags
+        clean_response = re.sub(r'<think>.*?</think>', '', raw_response, flags=re.DOTALL).strip()
+        return clean_response
+
+    except Exception as e:
+        logger.error(f"AI Generation Error: {e}")
+        return "Sorry, I am having trouble connecting to the AI model right now."

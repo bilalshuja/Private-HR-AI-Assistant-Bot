@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Super Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-900 text-white min-h-screen p-10">
+
+    <div class="flex justify-between items-center mb-10 border-b border-gray-700 pb-4">
+        <h1 class="text-3xl font-bold text-blue-400">
+            <i class="fas fa-user-astronaut mr-2"></i> Super Admin Control
+        </h1>
+        <a href="/logout" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-bold transition">
+            Logout
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        
+        <div class="md:col-span-1 bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl h-fit">
+            <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                <i class="fas fa-plus-circle text-green-400"></i> Create Company Admin
+            </h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="mb-4 p-3 rounded text-sm {{ 'bg-red-900/50 text-red-200' if category == 'error' else 'bg-green-900/50 text-green-200' }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST">
+                <div class="mb-4">
+                    <label class="block text-gray-400 text-xs uppercase mb-1">Company Name</label>
+                    <input type="text" name="company" required placeholder="e.g. CocaCola"
+                        class="w-full bg-slate-900 border border-slate-600 rounded p-3 text-white focus:border-blue-500 focus:outline-none">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-400 text-xs uppercase mb-1">Admin Email</label>
+                    <input type="email" name="email" required placeholder="admin@cocacola.com"
+                        class="w-full bg-slate-900 border border-slate-600 rounded p-3 text-white focus:border-blue-500 focus:outline-none">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-400 text-xs uppercase mb-1">Password</label>
+                    <input type="password" name="password" required placeholder="••••••••"
+                        class="w-full bg-slate-900 border border-slate-600 rounded p-3 text-white focus:border-blue-500 focus:outline-none">
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg transition">
+                    Create Admin
+                </button>
+            </form>
+        </div>
+
+        <div class="md:col-span-2 bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl">
+            <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                <i class="fas fa-list text-blue-400"></i> Active Admins
+            </h2>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-gray-400">
+                    <thead class="bg-slate-900 text-gray-200 uppercase font-bold">
+                        <tr>
+                            <th class="p-3">Company</th>
+                            <th class="p-3">Email</th>
+                            <th class="p-3">Created At</th>
+                            <th class="p-3">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-700">
+                        {% for admin in admins %}
+                        <tr class="hover:bg-slate-700/50 transition">
+                            <td class="p-3 font-bold text-white">{{ admin.company_name }}</td>
+                            <td class="p-3">{{ admin.email }}</td>
+                            <td class="p-3">{{ admin.created_at.strftime('%Y-%m-%d') }}</td>
+                            <td class="p-3">
+                                <span class="bg-green-900 text-green-300 px-2 py-1 rounded-full text-xs font-bold">Active</span>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="p-5 text-center text-gray-600">No admins created yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - {{ user.company_name }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans min-h-screen">
+
+    <nav class="bg-white shadow-sm border-b border-gray-200 px-8 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="bg-blue-600 text-white p-2 rounded-lg">
+                <i class="fas fa-building"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg">{{ user.company_name }}</h1>
+                <p class="text-xs text-gray-500 uppercase tracking-wide">Admin Control Center</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <span class="text-sm font-medium text-gray-600">{{ user.email }}</span>
+            <a href="/logout" class="bg-red-50 text-red-600 hover:bg-red-100 px-4 py-2 rounded-lg text-sm font-bold transition">
+                <i class="fas fa-sign-out-alt mr-1"></i> Logout
+            </a>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <div class="md:col-span-2 space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-gray-800">
+                    <i class="fas fa-cloud-upload-alt text-blue-600"></i> Upload Knowledge Base
+                </h2>
+                <p class="text-sm text-gray-500 mb-6">
+                    Upload your company policy documents (PDF). These will be processed automatically for the AI Chatbot.
+                </p>
+
+                <div class="border-2 border-dashed border-gray-300 rounded-xl p-10 text-center hover:bg-gray-50 transition cursor-pointer relative">
+                    <input type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                    <div class="flex flex-col items-center">
+                        <i class="fas fa-file-pdf text-4xl text-gray-400 mb-3"></i>
+                        <p class="font-bold text-gray-700">Click to upload or drag and drop</p>
+                        <p class="text-xs text-gray-400 mt-1">PDF files only (Max 10MB)</p>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="font-bold text-sm text-gray-700 mb-3 uppercase">Active Documents</h3>
+                    <div class="bg-gray-50 rounded-lg p-4 text-center text-gray-400 text-sm">
+                        No documents uploaded yet.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="md:col-span-1">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <h2 class="text-xl font-bold mb-6 flex items-center gap-2 text-gray-800">
+                    <i class="fas fa-user-cog text-gray-600"></i> Profile Settings
+                </h2>
+
+                <form>
+                    <div class="mb-4">
+                        <label class="block text-gray-600 text-xs font-bold mb-2 uppercase">Company Name</label>
+                        <input type="text" value="{{ user.company_name }}" disabled
+                            class="w-full bg-gray-100 border border-gray-300 rounded p-3 text-gray-500 cursor-not-allowed">
+                        <p class="text-xs text-gray-400 mt-1">Contact Super Admin to change company name.</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-600 text-xs font-bold mb-2 uppercase">Email Address</label>
+                        <input type="email" value="{{ user.email }}" disabled
+                            class="w-full bg-gray-100 border border-gray-300 rounded p-3 text-gray-500 cursor-not-allowed">
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-gray-600 text-xs font-bold mb-2 uppercase">New Password</label>
+                        <input type="password" placeholder="Leave empty to keep current"
+                            class="w-full bg-white border border-gray-300 rounded p-3 focus:border-blue-500 focus:outline-none transition">
+                    </div>
+
+                    <button class="w-full bg-gray-800 hover:bg-gray-900 text-white font-bold py-3 rounded-lg transition">
+                        Update Profile
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

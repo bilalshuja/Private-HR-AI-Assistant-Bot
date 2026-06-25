@@ -14,15 +14,16 @@ A Secure, Local-First, Cloud-Enhanced Agentic RAG System designed for HR operati
 
 The application is deployed using Docker Compose with a modular structure.
 
-| Component | Technology | Purpose |
-| :--- | :--- | :--- |
-| **LLM Engine** | Ollama (Llama 3.2) | Local inference—private and fast |
-| **Vector DB** | Pinecone Serverless | Hybrid search (Sparse + Dense) |
-| **Relational DB**| PostgreSQL | Secure storage for Users, Roles, and Tenants |
-| **Orchestration**| LangChain | RAG pipeline + AI agent tooling |
-| **Backend** | Flask (Python) | REST API, App Logic, RBAC |
-| **Memory** | Redis | User session & fast chat history |
-| **Deployment** | Docker & Docker Compose| Container orchestration & isolated environments |
+| Component         | Technology          | Purpose                           |
+| ----------------- | ------------------- | --------------------------------- |
+| **LLM Engine**    | Ollama (Llama 3.2)  | Local inference—private and fast  |
+| **Vector DB**     | Pinecone Serverless | Hybrid search (Sparse + Dense)    |
+| **Relational DB** | PostgreSQL          | Secure storage for Users,Tenants  |
+| **Embeddings**    | nomic-embed-text    | High‑quality 768‑dim text vectors |
+| **Orchestration** | LangChain           | RAG pipeline + tools integration  |
+| **Backend**       | Flask (Python)      | REST API + App Logic              |
+| **Memory**        | Redis               | User session & chat history       |
+| **Deployment**    | Docker & Docker Compose| Container orchestration & isolated environments |
 
 ## 📂 Directory Structure
 

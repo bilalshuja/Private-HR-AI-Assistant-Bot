@@ -12,10 +12,9 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email').lower().strip()
         password = request.form.get('password')
-        company = request.form.get('company').strip() # Case sensitive rakh sakte hain ya lower
+        company = request.form.get('company').strip() 
         
-        # 👇 QUERY CHANGE: Ab hum Email AUR Company dono se user dhoond rahe hain
-        # func.lower use kar rahe hain taake 'Google' aur 'google' same maane jayen
+       
         user = User.query.filter(
             func.lower(User.email) == email, 
             func.lower(User.company_name) == func.lower(company)
@@ -44,7 +43,7 @@ def register():
         password = request.form.get('password')
         company = request.form.get('company').strip()
 
-        # 👇 CHECK: Kya Is Company mein Ye Email pehle se hai?
+       
         existing_user = User.query.filter(
             func.lower(User.email) == email, 
             func.lower(User.company_name) == func.lower(company)
@@ -68,7 +67,7 @@ def register():
 
     return render_template('register.html')
 
-# ... (Logout aur Super Admin wale routes same rahenge) ...
+
 @auth_bp.route('/logout')
 @login_required
 def logout():
@@ -77,7 +76,7 @@ def logout():
 
 @auth_bp.route('/create-super-admin')
 def create_super_admin():
-    # Super Admin ka koi duplicate nahi ho sakta System company mein
+  
     if User.query.filter_by(role="super_admin").first():
         return "Super Admin already exists!"
     
@@ -85,4 +84,4 @@ def create_super_admin():
     user.set_password("super123")
     db.session.add(user)
     db.session.commit()
-    return "✅ Super Admin Created!"
+    return " Super Admin Created!"

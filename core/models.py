@@ -8,7 +8,7 @@ class User(UserMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     
-    # 👇 CHANGE 1: 'unique=True' hata diya hai. Ab duplicate emails allow hain.
+   
     email = db.Column(db.String(120), nullable=False)
     
     password_hash = db.Column(db.String(256), nullable=False)
@@ -16,7 +16,7 @@ class User(UserMixin, db.Model):
     company_name = db.Column(db.String(100), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # 👇 CHANGE 2: Ye Naya Rule hai (Email + Company mil kar unique honge)
+    
     __table_args__ = (
         db.UniqueConstraint('email', 'company_name', name='_email_company_uc'),
     )

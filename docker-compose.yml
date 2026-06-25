@@ -1,27 +1,26 @@
 services:
-  # Service 1: Aapki Python App
+  # Service 1:
   web:
     build: .
     #command: sh -c "python init_db.py && gunicorn -w 2 --timeout 300 --reload -b 0.0.0.0:5000 app:app"
-    # init_db hata diya, kyunki DB set ho chuka hai
     command: gunicorn -w 2 --timeout 300 --reload -b 0.0.0.0:5000 app:app
     volumes:
       - .:/app
     ports:
       - "5000:5000"
     environment:
-      - REDIS_HOST=redis_db  # Ye niche wale service ka naam hai
+      - REDIS_HOST=redis_db  
       - REDIS_PORT=6379
       - DATABASE_URL=postgresql://user:password@db:5432/ai_hr_db
-      # Pinecone Keys (Yahan apni keys paste karein ya .env file use karein)
+      # Pinecone Keys 
       - PINECONE_API_KEY=${PINECONE_API_KEY}
       - PINECONE_INDEX_NAME=${PINECONE_INDEX_NAME}
-      # Ollama Connection (Docker se Laptop tak)
+      # Ollama Connection 
       - OLLAMA_BASE_URL=http://host.docker.internal:11434
     depends_on:
       - redis_db
     env_file:
-      - .env  # Ye aapki local .env file utha lega
+      - .env  
 
   # Service 2: Redis Database
   redis_db:

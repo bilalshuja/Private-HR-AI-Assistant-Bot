@@ -6,6 +6,9 @@ load_dotenv()
 class Config:
     # App Settings
     SECRET_KEY = os.getenv("SECRET_KEY", " ")
+
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///local.db")
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # Pinecone Config (New)
     PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")

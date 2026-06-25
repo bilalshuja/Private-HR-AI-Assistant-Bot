@@ -1,5 +1,8 @@
 flask==3.1.0
 flask-session
+flask-login          
+flask-sqlalchemy     
+psycopg2-binary 
 redis==5.2.1
 langchain==0.3.17
 langchain-community==0.3.16

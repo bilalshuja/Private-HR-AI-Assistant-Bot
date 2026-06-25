@@ -176,9 +176,10 @@ When to restart Docker: Only run docker-compose up --build -d if you add new dep
 
 * [x] Docker containerization (Full stack)
 * [x] Admin dashboard & RBAC
-  [ ] Dynamic PDF Upload & Auto-Pinecone Ingestion
-  [ ] Multi-agent routing with LangGraph
-  [ ] Voice Interface via Whisper
+* [ ] Dynamic PDF Upload & Auto-Pinecone Ingestion
+* [ ] Multi-agent routing with LangGraph
+* [ ] Voice Interface via Whisper
+
 ---
 
 ## 🤝 Contributing

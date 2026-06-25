@@ -140,11 +140,12 @@ docker-compose exec web python init_db.py
 ```
 
 
-🚀 Usage Guide & Roles
+## 🚀 Usage Guide & Roles
 Once the containers are running, access the application at: http://localhost:5000
 
 System Roles
 Super Admin (/super-admin)
+
 
 Creation: Visit http://localhost:5000/create-super-admin to seed the initial Super Admin account.
 
@@ -157,8 +158,10 @@ Capabilities: Manages their specific company profile. (Future: PDF Knowledge Bas
 Employee / User (/)
 
 Capabilities: Standard chat interface. Can only interact with the AI assistant regarding their respective company's policies.
+---
 
-🛠️ Development & Hot-Reloading
+ ## 🛠️ Development & Hot-Reloading
+
 This environment is configured for active development. You do not need to restart Docker for standard code changes.
 
 HTML/CSS/JS Changes: Save the file and refresh your browser.
@@ -167,16 +170,29 @@ Python (.py) Changes: Gunicorn will auto-reload the Flask server. Save and refre
 
 When to restart Docker: Only run docker-compose up --build -d if you add new dependencies to requirements.txt or modify the Dockerfile/docker-compose.yml.
 
+---
+
+## 🔮 Future Roadmap
+
+* [x] Docker containerization (Full stack)
+* [x] Admin dashboard & RBAC
+  [ ] Dynamic PDF Upload & Auto-Pinecone Ingestion
+  [ ] Multi-agent routing with LangGraph
+  [ ] Voice Interface via Whisper
+---
+
+## 🤝 Contributing
+
+1. Fork the repo
+2. Create your branch: `git checkout -b feature/NewFeature`
+3. Commit changes
+4. Push: `git push origin feature/NewFeature`
+5. Submit a Pull Request
+
+---
+
 🔮 Future Roadmap
-[x] Docker containerization (Full stack)
 
-[x] Admin dashboard & RBAC
-
-[ ] Dynamic PDF Upload & Auto-Pinecone Ingestion
-
-[ ] Multi-agent routing with LangGraph
-
-[ ] Voice Interface via Whisper
 
 📜 License
 Licensed under the MIT License.

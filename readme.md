@@ -1,65 +1,65 @@
-# 🤖 Private Local Agentic HR Assistant
+# 🤖 Private Local Agentic HR Assistant (Multi-Tenant Edition)
 
-A **Secure, Local-First, Cloud-Enhanced Agentic RAG System** designed for HR operations. This project allows organizations to process sensitive HR policy queries using **Local LLMs via Ollama**, while leveraging **Pinecone Hybrid Search (Sparse + Dense)** for scalable cloud retrieval.
-
----
+A Secure, Local-First, Cloud-Enhanced Agentic RAG System designed for HR operations. This upgraded version features full Docker containerization, Role-Based Access Control (RBAC), and a Multi-Tenant architecture allowing different companies to securely manage their independent HR knowledge bases.
 
 ## 📌 Key Highlights
 
-*  **Local LLM Reasoning** (Ollama) → Full privacy
-*  **Hybrid RAG** → Dense + Sparse search for maximum accuracy
-*  **Modular Architecture** → Clean and scalable
-*  **Production Ready** → Designed for real HR environments
-*  **PDF Knowledge Base** → Fully indexed HR policies
-
----
+* **Fully Dockerized** → Zero setup hassle; Flask, PostgreSQL, and Redis run in isolated containers.
+* **Role-Based Access Control (RBAC)** → Three distinct tiers: Super Admin, Company Admin, and Employee.
+* **Multi-Tenant Architecture** → Data segregation ensures employees only interact with their respective company's policies.
+* **Local LLM Reasoning (Ollama)** → Maximum privacy for sensitive HR queries.
+* **Hybrid RAG** → Pinecone Serverless integration for Dense + Sparse search accuracy.
 
 ## 🏗️ System Architecture
 
-The application follows a **Modular Monolith** design with clear separation of responsibilities.
-
-### **Architecture Components**
+The application is deployed using Docker Compose with a modular structure.
 
 | Component         | Technology          | Purpose                           |
 | ----------------- | ------------------- | --------------------------------- |
 | **LLM Engine**    | Ollama (Llama 3.2)  | Local inference—private and fast  |
 | **Vector DB**     | Pinecone Serverless | Hybrid search (Sparse + Dense)    |
+| **Relational DB** | PostgreSQL          | Secure storage for Users,Tenants  |
 | **Embeddings**    | nomic-embed-text    | High‑quality 768‑dim text vectors |
 | **Orchestration** | LangChain           | RAG pipeline + tools integration  |
 | **Backend**       | Flask (Python)      | REST API + App Logic              |
 | **Memory**        | Redis               | User session & chat history       |
-| **Frontend**      | HTML / CSS / JS     | Modern, responsive UI             |
+| **Deployment**    | Docker & Docker Compose| Container orchestration & isolated environments |
 
-### **Directory Structure**
+## 📂 Directory Structure
 
-```
-HR-Assistant-Chatbot
+```text
+AI-project-v4
 │
-├── core/                  # 🧠 The Brain (Logic Layer)
-│   ├── config.py          # Central Config & Env Variables
-│   ├── rag_pipeline.py    # Hybrid RAG Logic
-│   ├── chat_memory.py     # Redis-Based Memory Manager
-│   └── ingest.py          # ETL + Hybrid Indexing
+├── core/                  # 🧠 Core Business Logic (DB, Models, Processors)
+├── data/                  # 📂 Source Documents (e.g., PDFs)
+├── routes/                # 🛣️ Application Routes
+│   ├── admin_routes.py    # Admin Dashboard & Super Admin Logic
+│   └── auth.py            # Login, Registration, Session Management
 │
 ├── static/                # 🎨 Frontend Assets
 │   ├── css/style.css
 │   └── js/main.js
 │
-├── templates/             # 📄 HTML Templates
-│   └── index.html
+├── templates/             # 📄 Jinja2 HTML Templates
+│   ├── company_admin.html # Company Admin Dashboard
+│   ├── index.html         # Main Chat Interface
+│   ├── login.html         # Authentication UI
+│   ├── register.html      # New User Registration UI
+│   └── super_admin.html   # Super Admin Control Panel
 │
-├── data/                  # 📂 Source Documents
-│   └── *.pdf              # HR Policies
-│
-├── vectorstore/           # ⚙️ Sparse Values
+├── vectorstore/           # ⚙️ Sparse Values (BM25)
 │   └── bm25_values.json
 │
-├── app.py                 # 🚀 Application Entry Point
-└── requirements.txt       # Dependency List
-```
+├── app.py                 # 🚀 Flask Application Entry Point
+├── Dockerfile             # 🐳 App Container Image Instructions
+├── docker-compose.yml     # 🐳 Multi-container Orchestration
+├── init_db.py             # 🗄️ Database Table Initialization Script
+└── requirements.txt       # Python Dependencies
 
 ---
+```
 
+```text
 ## ⚙️ Installation & Setup
 
 ### **1. Prerequisites**
@@ -76,7 +76,7 @@ HR-Assistant-Chatbot
 ```bash
 git clone https://github.com/yourusername/hr-assistant-chatbot.git
 cd hr-assistant-chatbot
-```
+
 
 ---
 
@@ -87,109 +87,99 @@ ollama pull llama3.2
 ollama pull nomic-embed-text
 ```
 
----
+⚙️ Installation & Setup (Dockerized)
+   1. Prerequisites
+Docker & Docker Desktop installed and running.
 
-### **4. Setup Virtual Environment**
+Ollama installed on your host machine (ollama.com).
 
-```bash
-python -m venv venv
-source venv/bin/activate    # Windows: venv\Scripts\activate
+Pinecone Serverless index (dimension: 768, metric: dotproduct).
 
-pip install -r requirements.txt
-```
+   2. Download Required LLM Models (Ollama)
+Ensure Ollama is running on your host machine, then pull the required models:
 
----
 
-### **5. Configure Environment Variables**
+ollama pull llama3.2
+ollama pull nomic-embed-text
 
-Create `.env` in project root:
+3. Configure Environment Variables
+Create a .env file in the project root:
+```text
 
-```ini
-# --- Flask Security ---
+# --- Security ---
 SECRET_KEY=your_super_secret_random_key
 
 # --- Pinecone Vector DB ---
 PINECONE_API_KEY=your_pinecone_api_key
-PINECONE_INDEX_NAME=hr-policy-index  # Must use 'dotproduct' metric
+PINECONE_INDEX_NAME=hr-policy-index
 
 # --- Redis Memory ---
-REDIS_HOST=localhost
+REDIS_HOST=redis_db
 REDIS_PORT=6379
-REDIS_DB=0
-```
 
----
+# --- Database ---
+DATABASE_URL=postgresql://postgres:postgres@db:5432/ai_hr_db
 
-## 🚀 Usage Guide
-
-### **Step 1 — Ingest HR PDFs (Build Knowledge Base)**
-
-This script reads all PDFs from `data/`, generates Hybrid (Dense + Sparse) vectors, and uploads them to Pinecone.
-
-```bash
-python -m core.ingest
-```
-
-**Output:**
+# --- Ollama Connection (Docker to Host) ---
+OLLAMA_BASE_URL=[http://host.docker.internal:11434](http://host.docker.internal:11434)
 
 ```
-🎉 Ingestion Complete! Vectors successfully uploaded.
+
+4. Build and Run the System
+Execute the following commands in your terminal to launch the system:
+
+```text
+# 1. Ensure a clean slate (removes old containers and volumes)
+docker-compose down -v
+
+# 2. Build and start all services in the background
+docker-compose up --build -d
+
+# 3. Wait ~5 seconds, then initialize the database tables
+docker-compose exec web python init_db.py
 ```
 
----
 
-### **Step 2 — Run the Application**
+🚀 Usage Guide & Roles
+Once the containers are running, access the application at: http://localhost:5000
 
-```bash
-python app.py
-```
+System Roles
+Super Admin (/super-admin)
 
-Open in browser:
+Creation: Visit http://localhost:5000/create-super-admin to seed the initial Super Admin account.
 
-```
-http://127.0.0.1:5000
-```
+Capabilities: Can create new Company Admins and manage system-wide tenants.
 
-Try queries such as:
+Company Admin (/dashboard)
 
-* *"What is the sick leave policy?"*
-* *"How many annual leaves are allowed?"*
-* *"Is there a travel allowance in the company?"*
+Capabilities: Manages their specific company profile. (Future: PDF Knowledge Base upload and versioning).
 
----
+Employee / User (/)
 
-## 🛠️ Troubleshooting
+Capabilities: Standard chat interface. Can only interact with the AI assistant regarding their respective company's policies.
 
-| Issue                        | Solution                                             |
-| ---------------------------- | ---------------------------------------------------- |
-| **Pinecone Metric Error**    | Use `dotproduct`, hybrid doesn’t work with `cosine`. |
-| **Ollama not responding**    | Ensure `ollama serve` is running.                    |
-| **BM25 params missing**      | Run ingestion script once to generate JSON.          |
-| **Redis connection refused** | Start Redis: `redis-server`.                         |
+🛠️ Development & Hot-Reloading
+This environment is configured for active development. You do not need to restart Docker for standard code changes.
 
----
+HTML/CSS/JS Changes: Save the file and refresh your browser.
 
-## 🔮 Future Roadmap
+Python (.py) Changes: Gunicorn will auto-reload the Flask server. Save and refresh.
 
-* [ ] Docker containerization (Full stack)
-* [ ] Multi-agent routing with LangGraph
-* [ ] Voice Interface via Whisper
-* [ ] Admin dashboard for PDF uploads
+When to restart Docker: Only run docker-compose up --build -d if you add new dependencies to requirements.txt or modify the Dockerfile/docker-compose.yml.
 
----
+🔮 Future Roadmap
+[x] Docker containerization (Full stack)
 
-## 🤝 Contributing
+[x] Admin dashboard & RBAC
 
-1. Fork the repo
-2. Create your branch: `git checkout -b feature/NewFeature`
-3. Commit changes
-4. Push: `git push origin feature/NewFeature`
-5. Submit a Pull Request
+[ ] Dynamic PDF Upload & Auto-Pinecone Ingestion
 
----
+[ ] Multi-agent routing with LangGraph
 
-## 📜 License
+[ ] Voice Interface via Whisper
 
-Licensed under the **MIT License**.
-
+📜 License
+Licensed under the MIT License.
 Built with ❤️ using Generative AI
+
+```
